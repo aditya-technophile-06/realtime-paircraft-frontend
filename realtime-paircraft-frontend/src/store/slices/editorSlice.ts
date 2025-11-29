@@ -6,6 +6,7 @@ interface EditorState {
   cursorPosition: number;
   isAutoCompleteEnabled: boolean;
   suggestion: string;
+  aiModel: string;
 }
 
 const initialState: EditorState = {
@@ -14,6 +15,7 @@ const initialState: EditorState = {
   cursorPosition: 0,
   isAutoCompleteEnabled: true,
   suggestion: '',
+  aiModel: 'auto',
 };
 
 const editorSlice = createSlice({
@@ -35,11 +37,15 @@ const editorSlice = createSlice({
     toggleAutoComplete: (state) => {
       state.isAutoCompleteEnabled = !state.isAutoCompleteEnabled;
     },
+    setAiModel: (state, action: PayloadAction<string>) => {
+      state.aiModel = action.payload;
+    },
     resetEditor: (state) => {
       state.code = initialState.code;
       state.language = initialState.language;
       state.cursorPosition = 0;
       state.suggestion = '';
+      state.aiModel = 'auto';
     },
   },
 });
@@ -50,6 +56,7 @@ export const {
   setCursorPosition,
   setSuggestion,
   toggleAutoComplete,
+  setAiModel,
   resetEditor,
 } = editorSlice.actions;
 

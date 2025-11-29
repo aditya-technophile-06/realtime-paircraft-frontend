@@ -25,10 +25,10 @@ export const Home = () => {
     try {
       const response = await api.createRoom(selectedLanguage);
       localStorage.setItem('username', createUsername.trim());
-      navigate(`/room/${response.roomId}`);
-    } catch (error) {
+      navigate(`/room/${response.roomId}?username=${encodeURIComponent(createUsername.trim())}`);
+    } catch (error: any) {
       console.error('Failed to create room:', error);
-      alert('Failed to create room. Please try again.');
+      alert(error?.message || 'Failed to create room. Please try again.');
     } finally {
       setIsCreating(false);
     }
@@ -41,7 +41,7 @@ export const Home = () => {
     }
     if (roomId.trim()) {
       localStorage.setItem('username', joinUsername.trim());
-      navigate(`/room/${roomId.trim()}`);
+      navigate(`/room/${roomId.trim()}?username=${encodeURIComponent(joinUsername.trim())}`);
     }
   };
 

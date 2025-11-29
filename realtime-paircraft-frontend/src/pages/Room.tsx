@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setCode, setLanguage } from '@/store/slices/editorSlice';
 import { setRoomId, setConnected, setCurrentUserId, setCurrentUsername, setUserCount, setUsers, addUser, removeUser, resetRoom } from '@/store/slices/roomSlice';
@@ -10,11 +10,13 @@ import { CodeEditor } from '@/components/CodeEditor';
 import { LanguageSelector } from '@/components/LanguageSelector';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { OutputPanel } from '@/components/OutputPanel';
+import { ModelSelector } from '@/components/ModelSelector';
 import { Code2, Users, Copy, Check, Home } from 'lucide-react';
 
 export const Room = () => {
   const { roomId } = useParams<{ roomId: string }>();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
   
   const { isConnected, userCount, currentUserId, currentUsername, users } = useAppSelector((state) => state.room as RoomState);
@@ -23,6 +25,9 @@ export const Room = () => {
   const [copied, setCopied] = useState(false);
   const [outputExpanded, setOutputExpanded] = useState(true);
   const [outputHeight, setOutputHeight] = useState(200);
+  
+  // Get username from URL params or localStorage
+  const urlUsername = searchParams.get('username');
 
   useEffect(() => {
     if (!roomId) {
@@ -30,102 +35,144 @@ export const Room = () => {
       return;
     }
 
+    let isMounted = true;
+    let hasConnected = false;
+
+    // Set up WebSocket message handler
+    const handleMessage = (message: WebSocketMessage) => {
+      if (!isMounted) return;
+      
+      switch (message.type) {
+        case 'init':
+          if (message.userId) {
+            dispatch(setCurrentUserId(message.userId));
+          }
+          if (message.username) {
+            dispatch(setCurrentUsername(message.username));
+          }
+          if (message.userCount !== undefined) {
+            dispatch(setUserCount(message.userCount));
+          }
+          if (message.users) {
+            dispatch(setUsers(message.users));
+          }
+          break;
+
+        case 'code_update':
+          if (message.code !== undefined) {
+            dispatch(setCode(message.code));
+          }
+          if (message.language) {
+            dispatch(setLanguage(message.language));
+          }
+          break;
+
+        case 'language_change':
+          if (message.language) {
+            dispatch(setLanguage(message.language));
+          }
+          break;
+
+        case 'user_joined':
+          if (message.userCount !== undefined) {
+            dispatch(setUserCount(message.userCount));
+          }
+          if (message.users) {
+            dispatch(setUsers(message.users));
+          } else if (message.userId && message.username) {
+            dispatch(addUser({ userId: message.userId, username: message.username }));
+          }
+          break;
+
+        case 'user_left':
+          if (message.userCount !== undefined) {
+            dispatch(setUserCount(message.userCount));
+          }
+          if (message.users) {
+            dispatch(setUsers(message.users));
+          } else if (message.userId) {
+            dispatch(removeUser(message.userId));
+          }
+          break;
+      }
+    };
+
     const initializeRoom = async () => {
+      // Prevent duplicate connections
+      if (hasConnected) return;
+      hasConnected = true;
+      
       try {
-        // Fetch room details
-        const roomDetails = await api.getRoom(roomId);
+        // Fetch room details with timeout
+        const roomDetails = await Promise.race([
+          api.getRoom(roomId),
+          new Promise<never>((_, reject) => 
+            setTimeout(() => reject(new Error('Request timeout')), 10000)
+          )
+        ]);
+        
+        if (!isMounted) return;
         
         dispatch(setRoomId(roomId));
         dispatch(setCode(roomDetails.code));
         dispatch(setLanguage(roomDetails.language));
 
-        // Get username from localStorage or use Anonymous
-        const username = localStorage.getItem('username') || 'Anonymous';
+        // Get username from URL params, localStorage, or use Anonymous
+        const username = urlUsername || localStorage.getItem('username') || 'Anonymous';
         dispatch(setCurrentUsername(username));
+        
+        // Update localStorage with username from URL if present
+        if (urlUsername) {
+          localStorage.setItem('username', urlUsername);
+        }
+        
+        // Update URL to include username if not already present
+        if (!urlUsername && username !== 'Anonymous') {
+          setSearchParams({ username }, { replace: true });
+        }
+
+        // Register message handler before connecting
+        wsService.onMessage(handleMessage);
 
         // Connect to WebSocket with username
         await wsService.connect(roomId, username);
+        
+        if (!isMounted) return;
+        
         dispatch(setConnected(true));
-
-        // Set up WebSocket message handler
-        const handleMessage = (message: WebSocketMessage) => {
-          switch (message.type) {
-            case 'init':
-              if (message.userId) {
-                dispatch(setCurrentUserId(message.userId));
-              }
-              if (message.username) {
-                dispatch(setCurrentUsername(message.username));
-              }
-              if (message.userCount !== undefined) {
-                dispatch(setUserCount(message.userCount));
-              }
-              if (message.users) {
-                dispatch(setUsers(message.users));
-              }
-              break;
-
-            case 'code_update':
-              if (message.code !== undefined) {
-                dispatch(setCode(message.code));
-              }
-              if (message.language) {
-                dispatch(setLanguage(message.language));
-              }
-              break;
-
-            case 'language_change':
-              if (message.language) {
-                dispatch(setLanguage(message.language));
-              }
-              break;
-
-            case 'user_joined':
-              if (message.userCount !== undefined) {
-                dispatch(setUserCount(message.userCount));
-              }
-              if (message.users) {
-                dispatch(setUsers(message.users));
-              } else if (message.userId && message.username) {
-                dispatch(addUser({ userId: message.userId, username: message.username }));
-              }
-              break;
-
-            case 'user_left':
-              if (message.userCount !== undefined) {
-                dispatch(setUserCount(message.userCount));
-              }
-              if (message.users) {
-                dispatch(setUsers(message.users));
-              } else if (message.userId) {
-                dispatch(removeUser(message.userId));
-              }
-              break;
-          }
-        };
-
-        wsService.onMessage(handleMessage);
         setIsLoading(false);
-
-        // Cleanup on unmount
-        return () => {
-          wsService.removeMessageHandler(handleMessage);
-          wsService.disconnect();
-          dispatch(resetRoom());
-        };
-      } catch (err) {
+      } catch (err: any) {
         console.error('Failed to initialize room:', err);
-        setError('Failed to join room. Please check the room ID and try again.');
-        setIsLoading(false);
+        if (isMounted) {
+          // Check if it's a 404 error (room not found)
+          if (err?.response?.status === 404 || err?.message?.includes('404')) {
+            setError('Room not found. Please check the room ID and try again.');
+          } else if (err?.message?.includes('timeout')) {
+            setError('Connection timeout. Please check your internet connection and try again.');
+          } else {
+            setError('Failed to join room. Please try again.');
+          }
+          setIsLoading(false);
+        }
       }
     };
 
     initializeRoom();
-  }, [roomId, navigate, dispatch]);
 
-  const copyRoomId = () => {
+    // Cleanup on unmount
+    return () => {
+      isMounted = false;
+      wsService.removeMessageHandler(handleMessage);
+      wsService.disconnect();
+      dispatch(resetRoom());
+    };
+  }, [roomId, navigate, dispatch, urlUsername, setSearchParams]);
+
+  const copyRoomLink = () => {
     if (roomId) {
-      navigator.clipboard.writeText(roomId);
+      // Copy full shareable URL without username (so new users can enter their own)
+      const shareUrl = `${window.location.origin}/room/${roomId}`;
+      navigator.clipboard.writeText(shareUrl);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -185,7 +232,7 @@ export const Room = () => {
             <span className="text-sm text-gray-400">Room:</span>
             <code className="text-primary-400 font-mono">{roomId}</code>
             <button
-              onClick={copyRoomId}
+              onClick={copyRoomLink}
               className="ml-2 p-1 hover:bg-gray-600 rounded transition-colors"
               title="Copy room ID"
             >
@@ -200,6 +247,7 @@ export const Room = () => {
 
         <div className="flex items-center gap-4">
           <LanguageSelector />
+          <ModelSelector />
           
           <div className="relative group">
             <div className="flex items-center gap-2 bg-gray-700 px-4 py-2 rounded-lg cursor-pointer">
