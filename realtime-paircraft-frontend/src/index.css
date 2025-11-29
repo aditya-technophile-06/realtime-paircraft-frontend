@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg-primary: #111827;
+  --bg-secondary: #1f2937;
+  --bg-tertiary: #374151;
+  --text-primary: #ffffff;
+  --text-secondary: #d1d5db;
+  --border-color: #4b5563;
+}
+
+.light {
+  --bg-primary: #f9fafb;
+  --bg-secondary: #ffffff;
+  --bg-tertiary: #f3f4f6;
+  --text-primary: #111827;
+  --text-secondary: #4b5563;
+  --border-color: #e5e7eb;
+}
+
+/* Background colors */
+.light .bg-gray-900,
+.light .from-gray-900,
+.light .via-gray-800,
+.light .to-gray-900 {
+  background-color: var(--bg-primary) !important;
+  background-image: none !important;
+}
+
+.light .bg-gray-800,
+.light .bg-gray-800\/50 {
+  background-color: var(--bg-secondary) !important;
+}
+
+.light .bg-gray-700 {
+  background-color: var(--bg-tertiary) !important;
+}
+
+.light .bg-gray-900\/50 {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Text colors */
+.light .text-white {
+  color: var(--text-primary) !important;
+}
+
+.light .text-gray-400,
+.light .text-gray-300,
+.light .text-gray-500 {
+  color: var(--text-secondary) !important;
+}
+
+.light .placeholder-gray-400::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Border colors */
+.light .border-gray-700,
+.light .border-gray-600 {
+  border-color: var(--border-color) !important;
+}
+
+/* Input and select elements */
+.light input,
+.light select,
+.light textarea {
+  background-color: #ffffff !important;
+  border-color: #d1d5db !important;
+  color: #111827 !important;
+}
+
+.light input::placeholder {
+  color: #9ca3af !important;
+}
+
+/* Cards and containers */
+.light .rounded-xl,
+.light .rounded-2xl,
+.light .rounded-lg {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Code blocks */
+.light code {
+  color: #0284c7 !important;
+}
+
+/* Gradient text fix */
+.light .bg-gradient-to-r {
+  background-image: linear-gradient(to right, #0ea5e9, #3b82f6) !important;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+}
