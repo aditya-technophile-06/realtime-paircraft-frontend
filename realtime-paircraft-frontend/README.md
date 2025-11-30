@@ -103,6 +103,33 @@ Deploy the `dist/` folder (Vercel does this automatically when `Root Directory =
   - Env Vars: `VITE_API_URL`, `VITE_WS_URL`, `VITE_AI_PROVIDER`
 - **Backend URL swaps** require redeploying frontend so Vite inlines new values.
 
+## 🖼️ UI Gallery (add screenshots below)
+
+1. **Landing Page – Create & Join Rooms**
+
+
+
+2. **AI Model Selector**
+
+
+
+3. **Language Selector**
+
+
+
+4. **Dark Theme Editor**
+
+
+5. **Light Theme Editor**
+
+
+6. **Remote Users & Active Typers**
+
+
+7. **AI Ghost Text Suggestion**
+
+
+
 ## 🛣️ Limitations & Future Work
 
 | Area | Current State | Potential Improvements |
