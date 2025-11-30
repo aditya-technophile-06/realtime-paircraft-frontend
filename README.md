@@ -6,7 +6,7 @@ Modern, real‑time collaborative coding UI built with React, TypeScript, Redux 
 
 | Service | URL |
 | --- | --- |
-| Frontend (Vercel) | `https://paircraft-ai.vercel.app/` *(replace with your custom domain if you change it)* |
+| Frontend (Vercel) | `https://paircraft-ai.vercel.app/`|
 | Backend (Render) | `https://paircraft-backend-zgsv.onrender.com` |
 
 Update `VITE_API_URL`/`VITE_WS_URL` whenever backend URL changes.
@@ -106,27 +106,40 @@ Deploy the `dist/` folder (Vercel does this automatically when `Root Directory =
 ## 🖼️ UI Gallery (add screenshots below)
 
 1. **Landing Page – Create & Join Rooms**
-
+   
+   ![Uploading Screenshot 2025-11-30 at 11.16.10 AM.png…]()
 
 
 2. **AI Model Selector**
-
+   
+   ![Uploading Screenshot 2025-11-30 at 11.09.40 AM.png…]()
 
 
 3. **Language Selector**
+   
+   ![Uploading Screenshot 2025-11-30 at 11.09.47 AM.png…]()
 
 
-
-4. **Dark Theme Editor**
-
-
-5. **Light Theme Editor**
+4. **Light Theme Editor**
+   
+   ![Uploading Screenshot 2025-11-30 at 11.10.05 AM.png…]()
 
 
-6. **Remote Users & Active Typers**
+5. **Remote Users & Active Typers**
+   
+   ![Uploading Screenshot 2025-11-30 at 11.02.40 AM.png…]()
+
+   ![Uploading Screenshot 2025-11-30 at 11.04.24 AM.png…]()
 
 
-7. **AI Ghost Text Suggestion**
+6. **AI Ghost Text Suggestion**
+   
+    ![Uploading Screenshot 2025-11-30 at 11.05.57 AM.png…]()
+
+7. **Code Output**
+   
+    ![Uploading Screenshot 2025-11-30 at 11.09.18 AM.png…]()
+
 
 
 
