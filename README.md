@@ -103,42 +103,53 @@ Deploy the `dist/` folder (Vercel does this automatically when `Root Directory =
   - Env Vars: `VITE_API_URL`, `VITE_WS_URL`, `VITE_AI_PROVIDER`
 - **Backend URL swaps** require redeploying frontend so Vite inlines new values.
 
-## 🖼️ UI Gallery (add screenshots below)
+## 🖼️ UI Gallery
 
 1. **Landing Page – Create & Join Rooms**
-   
-   ![Uploading Screenshot 2025-11-30 at 11.16.10 AM.png…]()
 
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.28.55 AM.png`
+
+   ![Landing page showing create/join cards](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.28.55%E2%80%AFAM.png)
 
 2. **AI Model Selector**
-   
-   ![Uploading Screenshot 2025-11-30 at 11.09.40 AM.png…]()
 
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.09.40 AM.png`
+
+   ![AI model selector dropdown](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.09.40%E2%80%AFAM.png)
 
 3. **Language Selector**
-   
-   ![Uploading Screenshot 2025-11-30 at 11.09.47 AM.png…]()
 
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.09.47 AM.png`
+
+   ![Language selector dropdown](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.09.47%E2%80%AFAM.png)
 
 4. **Light Theme Editor**
-   
-   ![Uploading Screenshot 2025-11-30 at 11.10.05 AM.png…]()
 
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.10.05 AM.png`
+
+   ![Editor in light theme](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.10.05%E2%80%AFAM.png)
 
 5. **Remote Users & Active Typers**
-   
-   ![Uploading Screenshot 2025-11-30 at 11.02.40 AM.png…]()
 
-   ![Uploading Screenshot 2025-11-30 at 11.04.24 AM.png…]()
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.02.40 AM.png`
 
+   ![Remote cursor label + user count](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.02.40%E2%80%AFAM.png)
+
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.04.24 AM.png`
+
+   ![Active typer label below cursor](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.04.24%E2%80%AFAM.png)
 
 6. **AI Ghost Text Suggestion**
-   
-    ![Uploading Screenshot 2025-11-30 at 11.05.57 AM.png…]()
+
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.05.57 AM.png`
+
+   ![Ghost text suggestion after debounce](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.05.57%E2%80%AFAM.png)
 
 7. **Code Output**
-   
-    ![Uploading Screenshot 2025-11-30 at 11.09.18 AM.png…]()
+
+   `realtime-paircraft-frontend/public/screenshots/Screenshot 2025-11-30 at 11.09.18 AM.png`
+
+   ![Execution output panel](realtime-paircraft-frontend/public/screenshots/Screenshot%202025-11-30%20at%2011.09.18%E2%80%AFAM.png)
 
 
 
